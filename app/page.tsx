@@ -29,84 +29,142 @@ export default function Home() {
 
   const toggleQuest = async (index:number) => {
 
-    try {
+  try {
 
-      if (!(window as any).ethereum) {
-        alert("MetaMask not found");
-        return;
+    if (!(window as any).ethereum) {
+      alert("Wallet not found");
+      return;
+    }
+
+    const ARC_CHAIN_ID = "0x13b2";
+
+    let chainId = await (window as any).ethereum.request({
+      method: "eth_chainId"
+    });
+
+    if (chainId !== ARC_CHAIN_ID) {
+
+      try {
+
+        await (window as any).ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: ARC_CHAIN_ID }]
+        });
+
+      } catch (switchError:any) {
+
+        if (switchError.code === 4902) {
+
+          await (window as any).ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: "0x13b2",
+              chainName: "Arc Testnet",
+              rpcUrls: ["https://rpc.testnet.arc.network"],
+              nativeCurrency: {
+                name: "USDC",
+                symbol: "USDC",
+                decimals: 6
+              }
+            }]
+          });
+
+        } else {
+
+          throw switchError;
+
+        }
+
       }
-
-      const accounts = await (window as any).ethereum.request({
-        method:"eth_requestAccounts"
-      });
-
-      const tx = await (window as any).ethereum.request({
-        method:"eth_sendTransaction",
-        params:[
-          {
-            from:accounts[0],
-            to:accounts[0],
-            value:"0x0"
-          }
-        ]
-      });
-
-      const updated=[...completed];
-      updated[index]=true;
-
-      setCompleted(updated);
-
-      alert(
-        `Quest Completed ✅\n\n${quests[index]}\nTX:${tx}`
-      );
-
-    } catch(err){
-
-      console.log(err);
-
-      alert("Transaction cancelled");
 
     }
 
-  };
+    const accounts = await (window as any).ethereum.request({
+      method: "eth_requestAccounts"
+    });
+
+    const tx = await (window as any).ethereum.request({
+      method: "eth_sendTransaction",
+      params: [
+        {
+          from: accounts[0],
+          to: accounts[0],
+          value: "0x0"
+        }
+      ]
+    });
+
+    const updated = [...completed];
+    updated[index] = true;
+
+    setCompleted(updated);
+
+    alert(
+      `Quest Completed ✅\n\n${quests[index]}\n\nTX Hash:\n${tx}`
+    );
+
+  } catch(err) {
+
+    console.log(err);
+
+    alert("Transaction cancelled");
+
+  }
+
+};
 
   const claimNFT = async()=>{
 
-    try{
+  try{
 
-      if (!(window as any).ethereum) {
-        alert("MetaMask not found");
-        return;
-      }
+    if (!(window as any).ethereum) {
+      alert("Wallet not found");
+      return;
+    }
 
-      const accounts=await (window as any).ethereum.request({
-        method:"eth_requestAccounts"
+    const ARC_CHAIN_ID = "0x13b2";
+
+    const chainId = await (window as any).ethereum.request({
+      method: "eth_chainId"
+    });
+
+    if (chainId !== ARC_CHAIN_ID) {
+
+      await (window as any).ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: ARC_CHAIN_ID }]
       });
-
-      const tx=await (window as any).ethereum.request({
-        method:"eth_sendTransaction",
-        params:[
-          {
-            from:accounts[0],
-            to:accounts[0],
-            value:"0x0"
-          }
-        ]
-      });
-
-      alert(
-        "NFT Reward Claimed 🎉\n\nTX:"+tx
-      );
-
-    }catch(err){
-
-      console.log(err);
-
-      alert("Transaction cancelled");
 
     }
 
-  };
+    const accounts = await (window as any).ethereum.request({
+      method:"eth_requestAccounts"
+    });
+
+    const tx = await (window as any).ethereum.request({
+      method:"eth_sendTransaction",
+      params:[
+        {
+          from:accounts[0],
+          to:accounts[0],
+          value:"0x0"
+        }
+      ]
+    });
+
+    alert(
+      `NFT Reward Claimed 🎉\n\nTX Hash:\n${tx}`
+    );
+
+  }catch(err){
+
+    console.log(err);
+
+    alert("Transaction cancelled");
+
+  }
+
+};
 
   return (
 
