@@ -47,27 +47,19 @@ export default function Home() {
       try {
 
         await (window as any).ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: ARC_CHAIN_ID }]
-        });
-
-      } catch (switchError:any) {
-
-        if (switchError.code === 4902) {
-
-          await (window as any).ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [{
-              chainId: "0x13b2",
-              chainName: "Arc Testnet",
-              rpcUrls: ["https://rpc.testnet.arc.network"],
-              nativeCurrency: {
-                name: "USDC",
-                symbol: "USDC",
-                decimals: 6
-              }
-            }]
-          });
+  method: "wallet_addEthereumChain",
+  params: [{
+    chainId: "0x13b2",
+    chainName: "Arc Testnet",
+    rpcUrls: ["https://rpc.testnet.arc.network"],
+    nativeCurrency: {
+      name: "USDC",
+      symbol: "USDC",
+      decimals: 6
+    },
+    blockExplorerUrls: ["https://explorer.testnet.arc.network"]
+  }]
+});
 
         } else {
 
