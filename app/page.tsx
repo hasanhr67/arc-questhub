@@ -36,7 +36,7 @@ export default function Home() {
       return;
     }
 
-    const ARC_CHAIN_ID = "0x13b2";
+    const ARC_CHAIN_ID = "0x4cf352";
 
     let chainId = await (window as any).ethereum.request({
       method: "eth_chainId"
@@ -49,7 +49,7 @@ export default function Home() {
         await (window as any).ethereum.request({
   method: "wallet_addEthereumChain",
   params: [{
-    chainId: "0x13b2",
+    chainId: "0x4cf352",
     chainName: "Arc Testnet",
     rpcUrls: ["https://rpc.testnet.arc.network"],
     nativeCurrency: {
@@ -114,7 +114,7 @@ export default function Home() {
       return;
     }
 
-    const ARC_CHAIN_ID = "0x13b2";
+    const ARC_CHAIN_ID = "0x4cf352";
 
     const chainId = await (window as any).ethereum.request({
       method: "eth_chainId"
